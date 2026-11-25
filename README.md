@@ -2,7 +2,9 @@
 
 Interactive web presentation for Assignments 1–3 (Coupa Supply Chain Guru).
 
-**Controls:** click, → or Space = next step · ← = back one step · F = fullscreen · swipe on touch screens.
-Each slide plays its arrival animation; click steps reveal problems (red), solutions (green) and enlarged charts.
+**Controls**
+- Click a map or chart (🔍) to open the enlarged view: step 1 = causes (red), step 2 = solutions (green), step 3 = extra data (black).
+- Inside the enlarged view: click or → for the next layer, ← to go back, Esc or click outside to close.
+- Elsewhere: click, → or Space = next slide · ← = back · F = fullscreen · swipe on touch screens.
 
 Files: `index.html` (the whole deck) and `klu_logo.png`.
