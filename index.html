@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Back’s Brewery – SCG Case Study 2026 (Group 03)</title>
+<link rel="icon" href="klu_logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+<style>
+:root {
+  --navy: #0B2545;
+  --blue: #1D5FAD;
+  --sky: #5B9BD5;
+  --ice: #E8F0FA;
+  --paper: #F5F8FC;
+  --line: #CFDDEE;
+  --muted: #44556B;
+  --red: #C8102E;
+  --teal: #0B7F64;
+  --grey: #9AA8B8;
+}
+body { font-family: 'Inter', Arial, sans-serif; color: var(--navy); }
+section { padding: 128px 128px 160px; background: var(--paper); display: flex; flex-direction: column; gap: 24px; }
+section.ice { background: var(--ice); }
+section.dark { background: var(--navy); color: #E8F0FA; }
+section.mapslide { padding: 128px 128px 160px 900px; }
+h1, h2, h3 { font-family: 'Space Grotesk', Arial, sans-serif; margin: 0; color: var(--navy); }
+h1 { font-size: 88px; font-weight: 700; line-height: 1.05; }
+h2 { font-size: 46px; font-weight: 700; line-height: 1.12; }
+h3 { font-size: 30px; font-weight: 600; line-height: 1.2; }
+p { font-size: 26px; line-height: 1.35; margin: 0; }
+.dark h1, .dark h2, .dark h3 { color: #F3F7FC; }
+.eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); }
+.dark .eyebrow { color: #8FC1F0; }
+.head { display: flex; flex-direction: column; gap: 10px; width: 1440px; }
+.mapslide .head { width: 800px; }
+.body { color: var(--muted); }
+.logo { position: absolute; right: 72px; top: 40px; width: 130px; height: 110px; object-fit: contain; border-radius: 10px; }
+.footer { position: absolute; left: 128px; bottom: 56px; width: 1664px; display: flex; justify-content: space-between; font-size: 24px; color: var(--muted); }
+.dark .footer { color: #A9BCD3; }
+
+/* map */
+.map { position: absolute; left: 112px; top: 120px; width: 737px; height: 784px; }
+.ml { position: absolute; font-size: 24px; font-weight: 600; line-height: 30px; padding: 0 6px; border-radius: 6px; background: rgba(245,248,252,.88); color: var(--navy); white-space: nowrap; }
+.ml.off { color: #6B7B8E; font-weight: 400; }
+.pin { position: absolute; font-size: 24px; font-weight: 700; line-height: 34px; padding: 0 12px; border-radius: 8px; white-space: nowrap; color: #FFFFFF; }
+.pin.red { background: var(--red); }
+.pin.teal { background: var(--teal); }
+.legend { display: flex; gap: 28px; font-size: 24px; color: var(--muted); }
+
+/* cards and kpis */
+.kpis { display: flex; gap: 24px; }
+.kpi { flex: 1; background: #FFFFFF; border-top: 6px solid var(--blue); border-radius: 0 0 12px 12px; padding: 22px 26px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 24px rgba(11,37,69,.06); }
+.kpi.red { border-top-color: var(--red); }
+.kpi.teal { border-top-color: var(--teal); }
+.kpi .num { font-family: 'Space Grotesk', Arial, sans-serif; font-size: 52px; font-weight: 700; line-height: 1.1; color: var(--navy); }
+.kpi .cap { font-size: 24px; color: var(--muted); line-height: 1.3; }
+.card { background: #FFFFFF; border-left: 6px solid var(--blue); border-radius: 0 12px 12px 0; padding: 20px 26px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 24px rgba(11,37,69,.06); }
+.card.red { border-left-color: var(--red); }
+.card.teal { border-left-color: var(--teal); }
+.card .body { font-size: 25px; }
+.tag { font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+.tag.red { color: var(--red); }
+.tag.teal { color: var(--teal); }
+.tag.blue { color: var(--blue); }
+
+/* bar charts */
+.chart { display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; align-items: center; gap: 16px; }
+.row .lbl { width: 190px; font-size: 24px; font-weight: 600; white-space: nowrap; }
+.row .val { width: 230px; font-size: 24px; color: var(--muted); white-space: nowrap; }
+.track { flex: 1; height: 26px; background: #DCE6F2; border-radius: 4px; overflow: hidden; display: flex; }
+.bar { height: 26px; background: var(--blue); animation: grow 1.1s ease-out both; transform-origin: left center; }
+.bar.red { background: var(--red); }
+.bar.teal { background: var(--teal); }
+.bar.navy { background: var(--navy); }
+.bar.off { background: var(--grey); }
+table { font-size: 24px; color: var(--navy); width: 100%; }
+
+/* zoom panel: shows only while it is the current click step */
+.zoom { position: absolute; left: 150px; top: 130px; width: 1620px; height: 800px; box-sizing: border-box; background: #FBFDFF; border: 3px solid var(--blue); border-radius: 18px; box-shadow: 0 30px 90px rgba(11,37,69,.30); padding: 48px 64px; display: flex; flex-direction: column; gap: 26px; }
+.zoom .row .lbl { width: 260px; font-size: 32px; }
+.zoom .row .val { width: 380px; font-size: 32px; }
+.zoom .track, .zoom .bar { height: 40px; }
+.zoom table { font-size: 32px; }
+.fragment.zoom { opacity: 0; transform: translateY(40px); transition: opacity .45s ease-out, transform .45s ease-out; }
+.fragment.zoom.visible { opacity: 0; transform: translateY(40px); }
+.fragment.zoom.visible.current-fragment { opacity: 1; transform: none; }
+
+/* an invisible click step that closes the zoom panel (and re-opens it when going back) */
+.fragment.closer, .fragment.closer.visible { opacity: 0; color: transparent; }
+
+/* problem / solution overlays */
+.fragment.hl { opacity: 0; transition: opacity .6s ease-out; }
+.fragment.hl.visible { opacity: 1; }
+.fragment.step { opacity: 0; transform: translateY(16px); transition: opacity .5s ease-out, transform .5s ease-out; }
+.fragment.step.visible { opacity: 1; transform: none; }
+
+/* arrival motion */
+.rise { animation: rise .7s ease-out both; }
+.d1 { animation-delay: .15s; }
+.d2 { animation-delay: .3s; }
+.d3 { animation-delay: .45s; }
+.d4 { animation-delay: .6s; }
+.d5 { animation-delay: .75s; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+@keyframes grow { from { transform: scaleX(0); } }
+@keyframes fade { from { opacity: 0; } }
+.fadein { animation: fade 1s ease-out both; }
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0 }
+@keyframes count { from { --n: 0 } }
+.n { animation: count 1.2s ease-out both }
+
+/* cover */
+.cover { justify-content: center; gap: 30px; }
+.cover .sub { font-size: 34px; color: #C6D7EC; width: 1300px; }
+.cover .meta { font-size: 26px; color: #A9BCD3; }
+.cover .logo { width: 220px; height: 186px; right: 128px; top: 110px; }
+
+/* ---- web presenter ---- */
+html, body { margin: 0; height: 100%; background: #0B1626; overflow: hidden; }
+#stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+#stage > section { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; box-sizing: border-box; overflow: hidden; display: none; }
+#stage > section.on { display: flex; }
+aside { display: none; }
+#hud { position: fixed; right: 16px; bottom: 12px; font: 14px Inter, Arial, sans-serif; color: #8FA6C2; opacity: .75; user-select: none; }
+#hud button { background: #1D5FAD; color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; margin-left: 6px; cursor: pointer; font: inherit; }
+#progress { position: fixed; left: 0; bottom: 0; height: 4px; background: #5B9BD5; transition: width .3s; }
+</style>
+</head>
+<body>
+<div id="stage">
+<section id="cover" data-transition="fade" style="background:#FBFDFF;padding:128px 128px 200px 330px;justify-content:center;gap:28px">
+<div style="position:absolute;left:0;top:380px;width:230px;height:500px;box-sizing:border-box;border:3px solid #1D5FAD;border-left:none;border-radius:0 48px 48px 0"></div>
+<div style="position:absolute;left:0;top:450px;width:70px;height:620px;box-sizing:border-box;border:2px solid #5B9BD5;border-left:none;border-bottom:none;border-radius:0 40px 0 0"></div>
+<div class="rise" style="position:absolute;left:0;top:1000px;width:1600px;height:64px;background:#1D5FAD;border-radius:0 56px 0 0"></div>
+<div style="position:absolute;left:0;top:1064px;width:1920px;height:16px;background:#9AA8B8"></div>
+<img src="klu_logo.png" alt="Kühne Logistics University logo" style="position:absolute;right:96px;top:64px;width:200px;height:168px;object-fit:contain">
+<p class="rise" style="font-size:40px;line-height:1.3;color:#1D5FAD;font-family:'Space Grotesk',Arial,sans-serif">Group 3:<br>Akib Shaikh, Bao Tam Pham, Yazhao Gong,<br>Doan Phan, Samruddhi Gavankar</p>
+<h1 class="rise d1" style="font-family:Georgia,'Times New Roman',serif;font-weight:400;font-size:110px;line-height:1.1;color:#0B2545">CASE STUDY<br>BACK’S BREWERY</h1>
+<p class="rise d2" style="font-size:40px;color:#1D5FAD;font-family:'Space Grotesk',Arial,sans-serif"><u>Strategic Issues in Supply Chain Management A</u></p>
+<aside>Back’s Brewery sells Pilsener in 50 L barrels at €75. Objective: maximise profit. All models were built in Coupa Supply Chain Guru with EUR, km and 28 % circuity.</aside>
+</section>
+<section id="exec" class="ice">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="head">
+<p class="eyebrow">Executive summary</p>
+<h2>Fewer warehouses and cheaper plants raise profit – but every network we optimise runs out of capacity</h2>
+</div>
+<div class="kpis">
+<div class="kpi rise d1"><p class="tag blue">1b · Close 5 of 12 sites</p><p class="num">+59.6 %</p><p class="cap">Profit €1.08 M → €1.73 M from fixed-cost savings; warehouses then run 98 % full.</p></div>
+<div class="kpi red rise d2"><p class="tag red">1c · 400 km rule</p><p class="num">3,632</p><p class="cap">barrels for Paris, London and Warsaw cannot be reached within 400 km – the model is infeasible.</p></div>
+<div class="kpi teal rise d3"><p class="tag teal">2b · Integrate Holstan</p><p class="num">+27.5 %</p><p class="cap">Profit €1.74 M → €2.22 M, driven by Holstan’s €38–40 plants; transport +54.5 %.</p></div>
+<div class="kpi red rise d4"><p class="tag red">3b · Seasonal demand</p><p class="num">36</p><p class="cap">barrels of warehouse headroom left at the July 2028 peak, even with 11 warehouses.</p></div>
+</div>
+<div class="card rise d5"><p class="tag blue">Recommendation</p><p class="body" style="font-size:28px">Adopt the lean 7-site design as the cost baseline, pursue Holstan only after pricing the deal – and plan warehouse capacity for the summer peak and continued growth, not for the yearly average.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru models 1a–3b</span><span>1</span></p>
+<aside>Four messages: consolidation pays, the 400 km promise needs capacity near Paris and Warsaw, Holstan’s cheap plants add 27.5 % profit, and seasonality pushes the network to its limit.</aside>
+</section>
+<section id="a1_base" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the 1a network: 12 warehouses shipping directly to 26 customers">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="none" stroke="#1D5FAD" stroke-opacity="0.6" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0s"/>
+<path d="M556 432L527 514" pathLength="1" stroke-width="2.0"/><path d="M556 432L638 399" pathLength="1" stroke-width="1.9"/><path d="M556 432L503 399" pathLength="1" stroke-width="2.4"/><path d="M556 432L550 469" pathLength="1" stroke-width="2.2"/><path d="M556 432L663 317" pathLength="1" stroke-width="2.2"/><path d="M556 432L566 359" pathLength="1" stroke-width="1.8"/><path d="M606 235L663 317" pathLength="1" stroke-width="4.1"/><path d="M442 107L457 184" pathLength="1" stroke-width="3.7"/><path d="M442 107L591 45" pathLength="1" stroke-width="5.0"/><path d="M393 266L268 311" pathLength="1" stroke-width="2.9"/><path d="M393 266L318 366" pathLength="1" stroke-width="4.1"/><path d="M222 377L259 368" pathLength="1" stroke-width="2.9"/><path d="M222 377L144 344" pathLength="1" stroke-width="2.7"/><path d="M222 377L205 445" pathLength="1" stroke-width="3.8"/><path d="M267 564L299 547" pathLength="1" stroke-width="2.1"/><path d="M267 564L110 508" pathLength="1" stroke-width="2.0"/><path d="M267 564L205 445" pathLength="1" stroke-width="4.7"/><path d="M267 564L336 590" pathLength="1" stroke-width="2.4"/><path d="M92 269L110 256" pathLength="1" stroke-width="1.7"/><path d="M92 269L74 271" pathLength="1" stroke-width="2.3"/><path d="M92 269L144 344" pathLength="1" stroke-width="4.2"/><path d="M279 658L183 646" pathLength="1" stroke-width="2.4"/><path d="M467 485L432 472" pathLength="1" stroke-width="2.1"/><path d="M373 448L318 366" pathLength="1" stroke-width="4.3"/><path d="M373 448L298 416" pathLength="1" stroke-width="1.8"/><path d="M373 448L432 472" pathLength="1" stroke-width="6.0"/><path d="M373 448L338 456" pathLength="1" stroke-width="2.3"/><path d="M373 448L358 502" pathLength="1" stroke-width="3.2"/><path d="M450 575L426 612" pathLength="1" stroke-width="1.6"/><path d="M450 575L424 639" pathLength="1" stroke-width="1.7"/><path d="M450 575L373 574" pathLength="1" stroke-width="1.9"/>
+</g>
+<g fill="#0B2545"><circle cx="268" cy="311" r="5"/><circle cx="426" cy="612" r="5"/><circle cx="259" cy="368" r="5"/><circle cx="318" cy="366" r="5"/><circle cx="457" cy="184" r="5"/><circle cx="424" cy="639" r="5"/><circle cx="299" cy="547" r="5"/><circle cx="527" cy="514" r="5"/><circle cx="638" cy="399" r="5"/><circle cx="110" cy="256" r="5"/><circle cx="74" cy="271" r="5"/><circle cx="144" cy="344" r="5"/><circle cx="298" cy="416" r="5"/><circle cx="373" cy="574" r="5"/><circle cx="432" cy="472" r="5"/><circle cx="110" cy="508" r="5"/><circle cx="205" cy="445" r="5"/><circle cx="503" cy="399" r="5"/><circle cx="591" cy="45" r="5"/><circle cx="338" cy="456" r="5"/><circle cx="183" cy="646" r="5"/><circle cx="336" cy="590" r="5"/><circle cx="550" cy="469" r="5"/><circle cx="663" cy="317" r="5"/><circle cx="566" cy="359" r="5"/><circle cx="358" cy="502" r="5"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="597" y="226" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="384" y="257" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="258" y="555" width="18" height="18" rx="3"/><rect x="83" y="260" width="18" height="18" rx="3"/><rect x="270" y="649" width="18" height="18" rx="3"/><rect x="491" y="742" width="18" height="18" rx="3"/><rect x="458" y="476" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/><rect x="441" y="566" width="18" height="18" rx="3"/></g>
+</svg>
+<p class="ml" style="left:10px;top:222px;width:146px">Manchester</p>
+<p class="ml" style="left:130px;top:382px;width:72px">Lille</p>
+<p class="ml" style="left:296px;top:226px;width:112px">Hamburg</p>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:618px;top:198px;width:100px">Gdansk</p>
+<p class="ml" style="left:568px;top:410px;width:76px">Brno</p>
+<p class="ml" style="left:384px;top:404px;width:128px">Stuttgart</p>
+<p class="ml" style="left:478px;top:488px;width:118px">Salzburg</p>
+<p class="ml" style="left:462px;top:560px;width:94px">Venice</p>
+<p class="ml" style="left:186px;top:548px;width:70px">Lyon</p>
+<p class="ml" style="left:292px;top:652px;width:138px">Marseilles</p>
+<p class="ml" style="left:512px;top:738px;width:96px">Napoli</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Problem sites circled in red: Napoli, Venice, Marseilles and Brno">
+<g fill="none" stroke="#C8102E" stroke-width="4">
+<circle cx="500" cy="751" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="450" cy="575" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="279" cy="658" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="556" cy="432" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:400px;top:700px;width:320px">Napoli · 0 % used · €133k</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:470px;top:556px;width:200px">Venice · 28 %</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:120px;top:690px;width:236px">Marseilles · 26 %</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:568px;top:406px;width:160px">Brno · 44 %</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 1a · Baseline</p>
+<h2>With all 12 warehouses open, each serves its region directly – and four run far below capacity</h2>
+</div>
+<div class="kpis rise d1">
+<div class="kpi"><p class="num">€1.08 M</p><p class="cap">profit · 14.8 % margin</p></div>
+<div class="kpi"><p class="num">76 %</p><p class="cap">network utilisation</p></div>
+</div>
+<div class="card rise d2"><h3>Structure</h3><p class="body">One echelon: warehouse → customer, 31 lanes, 336 km average. Paris, London, Cologne, Munich and Warsaw are split between two sites.</p></div>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Problem</p><p class="body">Napoli is open but ships nothing; Venice, Marseilles and Brno use under 50 %. Fixed costs are €1.60 M (26 % of cost), transport only €49k.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 1a (customer flows, site summary)</span><span>2</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>1a capacity utilisation per warehouse</h2>
+<div class="chart">
+<div class="row"><p class="lbl">Stuttgart</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">23,500 · 100 %</p></div>
+<div class="row"><p class="lbl">Gdansk</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">6,000 · 100 %</p></div>
+<div class="row"><p class="lbl">Lille</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">11,400 · 100 %</p></div>
+<div class="row"><p class="lbl">Manchester</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">8,700 · 100 %</p></div>
+<div class="row"><p class="lbl">Salzburg</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">1,400 · 100 %</p></div>
+<div class="row"><p class="lbl">Gothenburg</p><div class="track"><div class="bar" style="width:99.6%"></div></div><p class="val">13,451 · 99.6 %</p></div>
+<div class="row"><p class="lbl">Lyon</p><div class="track"><div class="bar" style="width:99.5%"></div></div><p class="val">12,234 · 99.5 %</p></div>
+<div class="row"><p class="lbl">Hamburg</p><div class="track"><div class="bar" style="width:79.2%"></div></div><p class="val">9,506 · 79 %</p></div>
+<div class="row"><p class="lbl">Brno</p><div class="track"><div class="bar red" style="width:44.3%"></div></div><p class="val">7,980 · 44 % low</p></div>
+<div class="row"><p class="lbl">Venice</p><div class="track"><div class="bar red" style="width:27.9%"></div></div><p class="val">1,504 · 28 % low</p></div>
+<div class="row"><p class="lbl">Marseilles</p><div class="track"><div class="bar red" style="width:26%"></div></div><p class="val">2,055 · 26 % low</p></div>
+<div class="row"><p class="lbl">Napoli</p><div class="track"><div class="bar red" style="width:0%"></div></div><p class="val">0 · idle</p></div>
+</div>
+</div>
+<p class="fragment closer" data-fragment-index="3" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Arrival: the lanes draw in. Click 1: problem sites pulse in red. Click 2: the utilisation chart opens large. Click 3: it closes. Total demand 97,730 barrels vs. 128,100 capacity: 30,370 barrels idle.</aside>
+</section>
+<section id="a1_bridge" class="ice">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="head">
+<p class="eyebrow">Assignment 1b · Optimal number of warehouses</p>
+<h2>Closing 5 of 12 warehouses lifts profit by €646k (+59.6 %) – the gain is fixed-cost savings, not volume</h2>
+</div>
+<div style="display:flex;gap:56px;flex:1">
+<div style="position:relative;width:1000px;height:566px">
+<div class="rise" style="position:absolute;left:20px;top:238px;width:150px;height:282px;background:#0B2545;border-radius:6px 6px 0 0"></div>
+<div class="rise d1" style="position:absolute;left:220px;top:100px;width:150px;height:138px;background:#0B7F64;border-radius:6px 6px 0 0"></div>
+<div class="rise d2" style="position:absolute;left:420px;top:69px;width:150px;height:31px;background:#0B7F64;border-radius:6px 6px 0 0"></div>
+<div class="rise d3" style="position:absolute;left:620px;top:69px;width:150px;height:6px;background:#C8102E"></div>
+<div class="rise d4" style="position:absolute;left:820px;top:70px;width:150px;height:450px;background:#1D5FAD;border-radius:6px 6px 0 0"></div>
+<p class="rise" style="position:absolute;left:20px;top:193px;width:150px;text-align:center;font-weight:700;font-size:30px">€1,084k</p>
+<p class="rise d1" style="position:absolute;left:220px;top:55px;width:150px;text-align:center;font-weight:700;font-size:30px;color:#0B7F64">+€531k</p>
+<p class="rise d2" style="position:absolute;left:420px;top:24px;width:150px;text-align:center;font-weight:700;font-size:30px;color:#0B7F64">+€120k</p>
+<p class="rise d3" style="position:absolute;left:620px;top:24px;width:150px;text-align:center;font-weight:700;font-size:30px;color:#C8102E">−€5k</p>
+<p class="rise d4" style="position:absolute;left:820px;top:25px;width:150px;text-align:center;font-weight:700;font-size:30px;color:#1D5FAD">€1,730k</p>
+<p style="position:absolute;left:0;top:532px;width:190px;text-align:center;font-size:24px;color:#44556B">1a · 12 sites</p>
+<p style="position:absolute;left:200px;top:532px;width:190px;text-align:center;font-size:24px;color:#44556B">Start-up saved</p>
+<p style="position:absolute;left:400px;top:532px;width:190px;text-align:center;font-size:24px;color:#44556B">Fixed op. saved</p>
+<p style="position:absolute;left:600px;top:532px;width:190px;text-align:center;font-size:24px;color:#44556B">Extra transport</p>
+<p style="position:absolute;left:800px;top:532px;width:190px;text-align:center;font-size:24px;color:#44556B">1b · 7 sites</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;flex:1">
+<div class="kpi rise d1"><p class="num">14.8 → 23.6 %</p><p class="cap">profit margin, same €7.33 M revenue</p></div>
+<div class="kpi rise d2"><p class="num">12 → 7</p><p class="cap">warehouses · utilisation 76 → 98 %</p></div>
+<div class="card teal fragment step" data-fragment-index="1"><p class="tag teal">Why it works</p><p class="body">Fixed costs are 26 % of cost, transport only 0.8 %: sites, not trucks, are the lever. Six sites cannot hold 97,730 barrels, so seven is the minimum.</p></div>
+</div>
+</div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 1a &amp; 1b (network summary)</span><span>3</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>Where the 1a cost goes (total €6.25 M)</h2>
+<div class="chart" style="gap:28px">
+<div class="row"><p class="lbl">Variable €47</p><div class="track"><div class="bar navy" style="width:100%"></div></div><p class="val">€4.59 M · 73.5 %</p></div>
+<div class="row"><p class="lbl">Start-up</p><div class="track"><div class="bar teal" style="width:28.6%"></div></div><p class="val">€1.31 M · 21.0 %</p></div>
+<div class="row"><p class="lbl">Fixed op.</p><div class="track"><div class="bar teal" style="width:6.3%"></div></div><p class="val">€0.29 M · 4.6 %</p></div>
+<div class="row"><p class="lbl">Transport</p><div class="track"><div class="bar red" style="width:1.1%"></div></div><p class="val">€0.05 M · 0.8 %</p></div>
+</div>
+<p class="body" style="font-size:32px">Variable cost is fixed by demand. Only fixed costs and transport can be optimised – and transport is negligible.</p>
+</div>
+<p class="fragment closer" data-fragment-index="3" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Bridge: start-up €1,313,159 → €782,441 (−€530,718), fixed operating €290,000 → €170,000, transport €49,259 → €53,908 (+€4,649). Click 1: why it works. Click 2: cost structure opens large.</aside>
+</section>
+<section id="a1_opt" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the 1b network: 7 open warehouses, 5 closed, all 26 customers served">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="none" stroke="#1D5FAD" stroke-opacity="0.6" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0s"/>
+<path d="M556 432L426 612" pathLength="1" stroke-width="1.6"/><path d="M556 432L424 639" pathLength="1" stroke-width="1.7"/><path d="M556 432L527 514" pathLength="1" stroke-width="2.0"/><path d="M556 432L638 399" pathLength="1" stroke-width="1.9"/><path d="M556 432L432 472" pathLength="1" stroke-width="2.3"/><path d="M556 432L503 399" pathLength="1" stroke-width="2.4"/><path d="M556 432L550 469" pathLength="1" stroke-width="2.2"/><path d="M556 432L663 317" pathLength="1" stroke-width="4.8"/><path d="M556 432L566 359" pathLength="1" stroke-width="1.8"/><path d="M442 107L457 184" pathLength="1" stroke-width="3.7"/><path d="M442 107L591 45" pathLength="1" stroke-width="5.2"/><path d="M393 266L268 311" pathLength="1" stroke-width="3.0"/><path d="M393 266L318 366" pathLength="1" stroke-width="5.3"/><path d="M222 377L259 368" pathLength="1" stroke-width="2.9"/><path d="M222 377L144 344" pathLength="1" stroke-width="2.7"/><path d="M222 377L205 445" pathLength="1" stroke-width="3.9"/><path d="M267 564L299 547" pathLength="1" stroke-width="2.1"/><path d="M267 564L110 508" pathLength="1" stroke-width="2.0"/><path d="M267 564L205 445" pathLength="1" stroke-width="4.0"/><path d="M267 564L183 646" pathLength="1" stroke-width="2.4"/><path d="M267 564L336 590" pathLength="1" stroke-width="2.5"/><path d="M92 269L110 256" pathLength="1" stroke-width="1.7"/><path d="M92 269L74 271" pathLength="1" stroke-width="2.4"/><path d="M92 269L144 344" pathLength="1" stroke-width="4.3"/><path d="M373 448L318 366" pathLength="1" stroke-width="3.3"/><path d="M373 448L298 416" pathLength="1" stroke-width="1.8"/><path d="M373 448L373 574" pathLength="1" stroke-width="1.9"/><path d="M373 448L432 472" pathLength="1" stroke-width="6.0"/><path d="M373 448L205 445" pathLength="1" stroke-width="2.4"/><path d="M373 448L338 456" pathLength="1" stroke-width="2.3"/><path d="M373 448L358 502" pathLength="1" stroke-width="3.2"/>
+</g>
+<g fill="#0B2545"><circle cx="268" cy="311" r="5"/><circle cx="426" cy="612" r="5"/><circle cx="259" cy="368" r="5"/><circle cx="318" cy="366" r="5"/><circle cx="457" cy="184" r="5"/><circle cx="424" cy="639" r="5"/><circle cx="299" cy="547" r="5"/><circle cx="527" cy="514" r="5"/><circle cx="638" cy="399" r="5"/><circle cx="110" cy="256" r="5"/><circle cx="74" cy="271" r="5"/><circle cx="144" cy="344" r="5"/><circle cx="298" cy="416" r="5"/><circle cx="373" cy="574" r="5"/><circle cx="432" cy="472" r="5"/><circle cx="110" cy="508" r="5"/><circle cx="205" cy="445" r="5"/><circle cx="503" cy="399" r="5"/><circle cx="591" cy="45" r="5"/><circle cx="338" cy="456" r="5"/><circle cx="183" cy="646" r="5"/><circle cx="336" cy="590" r="5"/><circle cx="550" cy="469" r="5"/><circle cx="663" cy="317" r="5"/><circle cx="566" cy="359" r="5"/><circle cx="358" cy="502" r="5"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="384" y="257" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="258" y="555" width="18" height="18" rx="3"/><rect x="83" y="260" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/></g>
+<g fill="#FBFDFF" stroke="#9AA8B8" stroke-width="3"><rect x="598" y="227" width="16" height="16" rx="3"/><rect x="271" y="650" width="16" height="16" rx="3"/><rect x="492" y="743" width="16" height="16" rx="3"/><rect x="459" y="477" width="16" height="16" rx="3"/><rect x="442" y="567" width="16" height="16" rx="3"/></g>
+</svg>
+<p class="ml" style="left:10px;top:222px;width:146px">Manchester</p>
+<p class="ml" style="left:130px;top:382px;width:72px">Lille</p>
+<p class="ml" style="left:296px;top:226px;width:112px">Hamburg</p>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:568px;top:410px;width:76px">Brno</p>
+<p class="ml" style="left:384px;top:404px;width:128px">Stuttgart</p>
+<p class="ml" style="left:186px;top:548px;width:70px">Lyon</p>
+<p class="ml off" style="left:580px;top:198px;width:154px">Gdansk (x)</p>
+<p class="ml off" style="left:292px;top:652px;width:176px">Marseilles (x)</p>
+<p class="ml off" style="left:512px;top:738px;width:138px">Napoli (x)</p>
+<p class="ml off" style="left:478px;top:488px;width:160px">Salzburg (x)</p>
+<p class="ml off" style="left:462px;top:560px;width:136px">Venice (x)</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Lanes over 580 km highlighted in red">
+<g stroke="#C8102E" stroke-width="5" stroke-linecap="round" fill="none"><path d="M556 432L424 639"/><path d="M556 432L426 612"/><path d="M556 432L663 317"/><path d="M373 448L205 445"/><path d="M267 564L110 508"/></g>
+<g fill="#C8102E">
+<circle cx="556" cy="432" r="7"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" path="M0 0 L-132 207"/></circle>
+<circle cx="556" cy="432" r="7"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" path="M0 0 L-130 180"/></circle>
+<circle cx="556" cy="432" r="7"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" path="M0 0 L107 -115"/></circle>
+<circle cx="373" cy="448" r="7"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" path="M0 0 L-168 -3"/></circle>
+<circle cx="267" cy="564" r="7"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite" path="M0 0 L-157 -56"/></circle>
+</g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:300px;top:696px;width:230px">Florence 933 km</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:480px;top:600px;width:220px">Bologna 842 km</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:520px;top:270px;width:210px">Warsaw 586 km</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:30px;top:452px;width:180px">Paris 640 km</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:10px;top:518px;width:200px">Nantes 659 km</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 1b · Optimised network</p>
+<h2>Seven warehouses serve all 26 customers – but Italy and Poland now ship from far away</h2>
+</div>
+<div class="kpis rise d1">
+<div class="kpi"><p class="num">336 → 368 km</p><p class="cap">average delivery distance</p></div>
+<div class="kpi red"><p class="num">1,670</p><p class="cap">barrels spare (1.7 % of demand)</p></div>
+</div>
+<div class="card rise d2"><h3>Five sites closed (x)</h3><p class="body">Gdansk, Marseilles, Napoli, Salzburg and Venice: €650,718 fixed cost removed for €4,649 more transport.</p></div>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Trade-off</p><p class="body">3,729 barrels now travel over 600 km (1a: 1,074). Brno serves Warsaw, Bologna and Florence; six of seven sites are 99.6 % full or more.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 1b (customer flows, site summary)</span><span>4</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>Utilisation of the 7 open warehouses (1b vs. 1a)</h2>
+<div class="chart" style="gap:22px">
+<div class="row"><p class="lbl">Stuttgart</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">100 % (1a 100 %)</p></div>
+<div class="row"><p class="lbl">Hamburg</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">100 % (1a 79 %)</p></div>
+<div class="row"><p class="lbl">Lille</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">100 % (1a 100 %)</p></div>
+<div class="row"><p class="lbl">Lyon</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">100 % (1a 99.5 %)</p></div>
+<div class="row"><p class="lbl">Manchester</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">100 % (1a 100 %)</p></div>
+<div class="row"><p class="lbl">Gothenburg</p><div class="track"><div class="bar" style="width:99.6%"></div></div><p class="val">99.6 % (1a 99.6 %)</p></div>
+<div class="row"><p class="lbl">Brno</p><div class="track"><div class="bar" style="width:91%"></div></div><p class="val">91 % (1a 44 %)</p></div>
+<div class="row"><p class="lbl">Network</p><div class="track"><div class="bar red" style="width:98.3%"></div></div><p class="val">98.3 % (1a 76 %)</p></div>
+</div>
+</div>
+<p class="fragment closer" data-fragment-index="3" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Arrival: the 7-site network draws in; closed sites are grey. Click 1: lanes over 580 km light up in red with moving shipments. Click 2: utilisation chart opens large. Six largest sites hold only 90,700 barrels, so seven is the minimum feasible number.</aside>
+</section>
+<section id="a1_400" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the seven Tier-1 customers and the candidate warehouses">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="#9AA8B8"><circle cx="268" cy="311" r="4"/><circle cx="426" cy="612" r="4"/><circle cx="259" cy="368" r="4"/><circle cx="424" cy="639" r="4"/><circle cx="299" cy="547" r="4"/><circle cx="527" cy="514" r="4"/><circle cx="638" cy="399" r="4"/><circle cx="110" cy="256" r="4"/><circle cx="74" cy="271" r="4"/><circle cx="298" cy="416" r="4"/><circle cx="373" cy="574" r="4"/><circle cx="110" cy="508" r="4"/><circle cx="503" cy="399" r="4"/><circle cx="338" cy="456" r="4"/><circle cx="183" cy="646" r="4"/><circle cx="336" cy="590" r="4"/><circle cx="550" cy="469" r="4"/><circle cx="566" cy="359" r="4"/><circle cx="358" cy="502" r="4"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="597" y="226" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="384" y="257" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="258" y="555" width="18" height="18" rx="3"/><rect x="83" y="260" width="18" height="18" rx="3"/><rect x="270" y="649" width="18" height="18" rx="3"/><rect x="491" y="742" width="18" height="18" rx="3"/><rect x="458" y="476" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/><rect x="441" y="566" width="18" height="18" rx="3"/></g>
+<g fill="#0B2545" stroke="#FBFDFF" stroke-width="2"><circle cx="205" cy="445" r="10"/><circle cx="144" cy="344" r="10"/><circle cx="663" cy="317" r="10"/><circle cx="318" cy="366" r="10"/><circle cx="432" cy="472" r="10"/><circle cx="591" cy="45" r="10"/><circle cx="457" cy="184" r="10"/></g>
+</svg>
+<p class="ml" style="left:10px;top:222px;width:146px">Manchester</p>
+<p class="ml" style="left:232px;top:356px;width:72px">Lille</p>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:616px;top:204px;width:100px">Gdansk</p>
+<p class="ml" style="left:568px;top:410px;width:76px">Brno</p>
+<p class="ml" style="left:384px;top:404px;width:128px">Stuttgart</p>
+<p class="ml" style="left:186px;top:548px;width:70px">Lyon</p>
+<p class="ml" style="left:214px;top:446px;width:76px">Paris</p>
+<p class="ml" style="left:46px;top:352px;width:96px">London</p>
+<p class="ml" style="left:640px;top:326px;width:96px">Warsaw</p>
+<p class="ml" style="left:328px;top:330px;width:110px">Cologne</p>
+<p class="ml" style="left:444px;top:460px;width:100px">Munich</p>
+<p class="ml" style="left:600px;top:24px;width:134px">Stockholm</p>
+<p class="ml" style="left:470px;top:160px;width:146px">Copenhagen</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="400 km zones around Paris, London and Warsaw with the only reachable warehouses">
+<g fill="#C8102E" fill-opacity="0.07" stroke="#C8102E" stroke-width="3" stroke-dasharray="10 8"><circle cx="205" cy="445" r="108"/><circle cx="144" cy="344" r="108"/><circle cx="663" cy="317" r="108"/></g>
+<g stroke="#C8102E" stroke-width="5" stroke-linecap="round"><path d="M222 377L205 445"/><path d="M222 377L144 344"/><path d="M92 269L144 344"/><path d="M606 235L663 317"/></g>
+<g stroke="#9AA8B8" stroke-width="3" stroke-dasharray="6 8"><path d="M267 564L205 445"/><path d="M556 432L663 317"/></g>
+<g fill="none" stroke="#C8102E" stroke-width="4"><circle cx="222" cy="377" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle><circle cx="606" cy="235" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle></g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:206px;top:444px;width:190px">Paris −1,579</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:10px;top:350px;width:190px">London −466</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:520px;top:326px;width:214px">Warsaw −1,587</p>
+<svg class="fragment hl" data-fragment-index="3" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Solution: extra lanes Lyon to Paris and Brno to Warsaw in green">
+<g stroke="#0B7F64" stroke-width="6" stroke-linecap="round"><path d="M267 564L205 445"/><path d="M556 432L663 317"/></g>
+<g fill="#0B7F64">
+<circle cx="267" cy="564" r="8"><animateMotion dur="2s" begin="0s" repeatCount="indefinite" path="M0 0 L-62 -119"/></circle>
+<circle cx="556" cy="432" r="8"><animateMotion dur="2s" begin="0s" repeatCount="indefinite" path="M0 0 L107 -115"/></circle>
+</g>
+</svg>
+<p class="pin teal fragment hl" data-fragment-index="3" style="left:240px;top:494px;width:170px">Lyon 501 km</p>
+<p class="pin teal fragment hl" data-fragment-index="3" style="left:560px;top:364px;width:170px">Brno 586 km</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 1c · 400 km for Tier-1 customers</p>
+<h2>Infeasible: Paris, London and Warsaw lack warehouse capacity within 400 km</h2>
+</div>
+<p class="body rise d1">1b + Customer Sourcing Policy “MaxSourcingDistance = 400 km” for the 7 customers above 5,000 barrels; all demand must be served.</p>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Why infeasible</p><p class="body">Paris can only use Lille (11,400 &lt; 12,979) and Warsaw only Gdansk (6,000 &lt; 7,587). With Lille full, London is 466 short. ≥ 3,632 barrels cannot be served – even with all 12 sites open.</p></div>
+<div class="card teal fragment step" data-fragment-index="3"><p class="tag teal">How to fix</p><p class="body">Allow ~600 km for Paris and Warsaw (Lyon 501 km, Brno 586 km), add capacity near Paris and Warsaw, or allow partial delivery with a penalty.</p></div>
+<p class="body" style="font-size:24px">Stockholm is not the cause: Guru keeps its only lane (Gothenburg, 508 km).</p>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 1c (LP constraints, transport arcs)</span><span>5</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>Demand vs. warehouse capacity within 400 km</h2>
+<div class="chart" style="gap:18px">
+<p class="tag blue" style="font-size:28px">Paris + London</p>
+<div class="row"><p class="lbl">Demand</p><div class="track"><div class="bar navy" style="width:100%"></div></div><p class="val">22,145</p></div>
+<div class="row"><p class="lbl">Capacity</p><div class="track"><div class="bar red" style="width:90.8%"></div></div><p class="val">20,100 · −2,045</p></div>
+<p class="tag blue" style="font-size:28px;margin-top:20px">Warsaw</p>
+<div class="row"><p class="lbl">Demand</p><div class="track"><div class="bar navy" style="width:34.3%"></div></div><p class="val">7,587</p></div>
+<div class="row"><p class="lbl">Capacity</p><div class="track"><div class="bar red" style="width:27.1%"></div></div><p class="val">6,000 · −1,587</p></div>
+</div>
+<p class="body" style="font-size:32px">Cologne, Munich, Stockholm and Copenhagen can be covered. In the LP, Lille → Paris must carry 12,979 but Lille ships at most 11,400.</p>
+</div>
+<aside>Click 1: the 400 km zones and the only reachable warehouses light up in red, with the shortfalls. Click 2: demand vs. capacity chart opens large. Click 3: solution – green lanes Lyon → Paris and Brno → Warsaw show what relaxing the limit to about 600 km would allow.</aside>
+</section>
+<section id="a2_base" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the 2a network: 4 plants supply 7 warehouses, which serve 26 customers">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="none" stroke="#5B9BD5" stroke-opacity="0.7" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0.8s"/>
+<path d="M556 432L426 612" pathLength="1" stroke-width="1.6"/><path d="M556 432L424 639" pathLength="1" stroke-width="1.7"/><path d="M556 432L527 514" pathLength="1" stroke-width="2.0"/><path d="M556 432L638 399" pathLength="1" stroke-width="1.9"/><path d="M556 432L432 472" pathLength="1" stroke-width="2.3"/><path d="M556 432L503 399" pathLength="1" stroke-width="2.4"/><path d="M556 432L550 469" pathLength="1" stroke-width="2.2"/><path d="M556 432L663 317" pathLength="1" stroke-width="4.8"/><path d="M556 432L566 359" pathLength="1" stroke-width="1.8"/><path d="M442 107L457 184" pathLength="1" stroke-width="3.7"/><path d="M442 107L591 45" pathLength="1" stroke-width="5.2"/><path d="M393 266L268 311" pathLength="1" stroke-width="3.0"/><path d="M393 266L318 366" pathLength="1" stroke-width="5.3"/><path d="M222 377L259 368" pathLength="1" stroke-width="2.9"/><path d="M222 377L144 344" pathLength="1" stroke-width="2.7"/><path d="M222 377L205 445" pathLength="1" stroke-width="3.9"/><path d="M267 564L299 547" pathLength="1" stroke-width="2.1"/><path d="M267 564L110 508" pathLength="1" stroke-width="2.0"/><path d="M267 564L205 445" pathLength="1" stroke-width="4.0"/><path d="M267 564L183 646" pathLength="1" stroke-width="2.4"/><path d="M267 564L336 590" pathLength="1" stroke-width="2.5"/><path d="M92 269L110 256" pathLength="1" stroke-width="1.7"/><path d="M92 269L74 271" pathLength="1" stroke-width="2.4"/><path d="M92 269L144 344" pathLength="1" stroke-width="4.3"/><path d="M373 448L318 366" pathLength="1" stroke-width="3.3"/><path d="M373 448L298 416" pathLength="1" stroke-width="1.8"/><path d="M373 448L373 574" pathLength="1" stroke-width="1.9"/><path d="M373 448L432 472" pathLength="1" stroke-width="6.0"/><path d="M373 448L205 445" pathLength="1" stroke-width="2.4"/><path d="M373 448L338 456" pathLength="1" stroke-width="2.3"/><path d="M373 448L358 502" pathLength="1" stroke-width="3.2"/>
+</g>
+<g fill="none" stroke="#0B2545" stroke-opacity="0.75" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.2s" begin="0s"/>
+<path d="M477 305L556 432" pathLength="1" stroke-width="4.6"/><path d="M364 284L442 107" pathLength="1" stroke-width="1.9"/><path d="M364 284L393 266" pathLength="1" stroke-width="3.8"/><path d="M372 490L267 564" pathLength="1" stroke-width="3.7"/><path d="M372 490L373 448" pathLength="1" stroke-width="6.0"/><path d="M258 328L442 107" pathLength="1" stroke-width="3.7"/><path d="M258 328L222 377" pathLength="1" stroke-width="3.7"/><path d="M258 328L267 564" pathLength="1" stroke-width="1.7"/><path d="M258 328L92 269" pathLength="1" stroke-width="3.2"/>
+</g>
+<g fill="#0B2545"><circle cx="268" cy="311" r="5"/><circle cx="426" cy="612" r="5"/><circle cx="259" cy="368" r="5"/><circle cx="318" cy="366" r="5"/><circle cx="457" cy="184" r="5"/><circle cx="424" cy="639" r="5"/><circle cx="299" cy="547" r="5"/><circle cx="527" cy="514" r="5"/><circle cx="638" cy="399" r="5"/><circle cx="110" cy="256" r="5"/><circle cx="74" cy="271" r="5"/><circle cx="144" cy="344" r="5"/><circle cx="298" cy="416" r="5"/><circle cx="373" cy="574" r="5"/><circle cx="432" cy="472" r="5"/><circle cx="110" cy="508" r="5"/><circle cx="205" cy="445" r="5"/><circle cx="503" cy="399" r="5"/><circle cx="591" cy="45" r="5"/><circle cx="338" cy="456" r="5"/><circle cx="183" cy="646" r="5"/><circle cx="336" cy="590" r="5"/><circle cx="550" cy="469" r="5"/><circle cx="663" cy="317" r="5"/><circle cx="566" cy="359" r="5"/><circle cx="358" cy="502" r="5"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="384" y="257" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="258" y="555" width="18" height="18" rx="3"/><rect x="83" y="260" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/></g>
+<g fill="#0B2545" stroke="#FBFDFF" stroke-width="3"><rect x="464" y="292" width="26" height="26" rx="4"/><rect x="351" y="271" width="26" height="26" rx="4"/><rect x="359" y="477" width="26" height="26" rx="4"/><rect x="245" y="315" width="26" height="26" rx="4"/></g>
+</svg>
+<p class="ml" style="left:10px;top:222px;width:146px">Manchester</p>
+<p class="ml" style="left:130px;top:382px;width:72px">Lille</p>
+<p class="ml" style="left:296px;top:226px;width:112px">Hamburg</p>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:568px;top:410px;width:76px">Brno</p>
+<p class="ml" style="left:384px;top:404px;width:128px">Stuttgart</p>
+<p class="ml" style="left:186px;top:548px;width:70px">Lyon</p>
+<p class="ml" style="left:494px;top:284px;width:166px;color:#FBFDFF;background:#0B2545">Berlin · 64 %</p>
+<p class="ml" style="left:196px;top:270px;width:168px;color:#FBFDFF;background:#0B2545">Bremen · 60 %</p>
+<p class="ml" style="left:110px;top:496px;width:246px;color:#FBFDFF;background:#0B2545">Constance · 100 %</p>
+<p class="ml" style="left:20px;top:300px;width:224px;color:#FBFDFF;background:#0B2545">Rotterdam · 100 %</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Full warehouses circled in red">
+<g fill="none" stroke="#C8102E" stroke-width="4">
+<circle cx="442" cy="107" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="393" cy="266" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="222" cy="377" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="267" cy="564" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="92" cy="269" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="373" cy="448" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:300px;top:700px;width:420px">6 of 7 warehouses full · 1,670 spare</p>
+<svg class="fragment hl" data-fragment-index="2" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Plants with spare capacity circled in green: Berlin and Bremen">
+<g fill="none" stroke="#0B7F64" stroke-width="4">
+<circle cx="477" cy="305" r="22"><animate attributeName="r" values="20;30;20" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="364" cy="284" r="22"><animate attributeName="r" values="20;30;20" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<p class="pin teal fragment hl" data-fragment-index="2" style="left:300px;top:648px;width:420px">Plants: 18,270 barrels spare</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 2a · End-to-end network</p>
+<h2>All four plants stay open – distribution, not production, is the bottleneck</h2>
+</div>
+<div class="kpis rise d1">
+<div class="kpi"><p class="num">€1.745 M</p><p class="cap">profit · 23.8 % margin</p></div>
+<div class="kpi teal"><p class="num">84 %</p><p class="cap">plants used</p></div>
+<div class="kpi red"><p class="num">98 %</p><p class="cap">warehouses used</p></div>
+</div>
+<div class="card rise d2"><h3>Why this network</h3><p class="body">Rotterdam (€45) and Constance (€47) run full; Berlin and Bremen fill the rest. Same 7 warehouses as 1b; 9 inbound + 31 outbound lanes, no direct plant → customer.</p></div>
+<div class="card red fragment step" data-fragment-index="2"><p class="tag red">Implication</p><p class="body">18,270 spare plant barrels but only 1,670 of warehouse headroom: growth needs warehouse capacity first.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 2a (site summary, flows)</span><span>6</span></p>
+<div class="zoom fragment" data-fragment-index="3">
+<h2>2a utilisation: plants vs. warehouses</h2>
+<div class="chart" style="gap:14px">
+<div class="row"><p class="lbl">Rotterdam</p><div class="track"><div class="bar navy" style="width:100%"></div></div><p class="val">32,500 · 100 %</p></div>
+<div class="row"><p class="lbl">Constance</p><div class="track"><div class="bar navy" style="width:100%"></div></div><p class="val">35,000 · 100 %</p></div>
+<div class="row"><p class="lbl">Berlin</p><div class="track"><div class="bar teal" style="width:64.2%"></div></div><p class="val">16,379 · 64 %</p></div>
+<div class="row"><p class="lbl">Bremen</p><div class="track"><div class="bar teal" style="width:60.2%"></div></div><p class="val">13,851 · 60 %</p></div>
+<div class="row" style="margin-top:16px"><p class="lbl">Brno</p><div class="track"><div class="bar" style="width:91%"></div></div><p class="val">16,379 · 91 %</p></div>
+<div class="row"><p class="lbl">Gothenburg</p><div class="track"><div class="bar" style="width:99.6%"></div></div><p class="val">13,451 · 99.6 %</p></div>
+<div class="row"><p class="lbl">5 others</p><div class="track"><div class="bar red" style="width:100%"></div></div><p class="val">each 100 %</p></div>
+</div>
+<p class="body" style="font-size:32px">Plants: 97,730 of 116,000 (84.3 %) · Warehouses: 97,730 of 99,400 (98.3 %)</p>
+</div>
+<p class="fragment closer" data-fragment-index="4" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Arrival: inbound lanes (dark) draw first, then outbound lanes (light blue). Click 1: full warehouses pulse red. Click 2: plants with spare capacity pulse green, plus the implication. Click 3: utilisation chart opens large. Transport: inbound €0.0012, outbound €0.0015 per barrel·km.</aside>
+</section>
+<section id="a2_holstan" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the integrated 2b network with Holstan plants Košice and Skopje">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="none" stroke="#5B9BD5" stroke-opacity="0.7" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0.8s"/>
+<path d="M556 432L426 612" pathLength="1" stroke-width="1.6"/><path d="M556 432L424 639" pathLength="1" stroke-width="1.6"/><path d="M556 432L527 514" pathLength="1" stroke-width="1.9"/><path d="M556 432L638 399" pathLength="1" stroke-width="1.8"/><path d="M556 432L373 574" pathLength="1" stroke-width="1.8"/><path d="M556 432L432 472" pathLength="1" stroke-width="3.7"/><path d="M556 432L503 399" pathLength="1" stroke-width="2.2"/><path d="M556 432L336 590" pathLength="1" stroke-width="2.3"/><path d="M556 432L550 469" pathLength="1" stroke-width="2.1"/><path d="M556 432L663 317" pathLength="1" stroke-width="2.1"/><path d="M556 432L566 359" pathLength="1" stroke-width="1.7"/><path d="M606 235L663 317" pathLength="1" stroke-width="3.6"/><path d="M442 107L110 256" pathLength="1" stroke-width="1.6"/><path d="M442 107L74 271" pathLength="1" stroke-width="1.5"/><path d="M442 107L591 45" pathLength="1" stroke-width="4.4"/><path d="M222 377L74 271" pathLength="1" stroke-width="1.9"/><path d="M222 377L144 344" pathLength="1" stroke-width="4.7"/><path d="M222 377L110 508" pathLength="1" stroke-width="1.9"/><path d="M373 448L259 368" pathLength="1" stroke-width="1.7"/><path d="M373 448L299 547" pathLength="1" stroke-width="2.0"/><path d="M373 448L298 416" pathLength="1" stroke-width="1.7"/><path d="M373 448L205 445" pathLength="1" stroke-width="6.0"/><path d="M373 448L338 456" pathLength="1" stroke-width="2.2"/><path d="M373 448L183 646" pathLength="1" stroke-width="2.2"/><path d="M373 448L358 502" pathLength="1" stroke-width="2.9"/><path d="M476 411L318 366" pathLength="1" stroke-width="4.7"/><path d="M476 411L432 472" pathLength="1" stroke-width="3.5"/><path d="M505 270L268 311" pathLength="1" stroke-width="2.7"/><path d="M505 270L259 368" pathLength="1" stroke-width="2.4"/><path d="M505 270L318 366" pathLength="1" stroke-width="2.6"/><path d="M505 270L457 184" pathLength="1" stroke-width="3.3"/><path d="M505 270L74 271" pathLength="1" stroke-width="1.7"/>
+</g>
+<g fill="none" stroke="#0B2545" stroke-opacity="0.75" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.2s" begin="0s"/>
+<path d="M477 305L505 270" pathLength="1" stroke-width="5.5"/><path d="M372 490L373 448" pathLength="1" stroke-width="2.1"/><path d="M258 328L442 107" pathLength="1" stroke-width="3.8"/><path d="M258 328L222 377" pathLength="1" stroke-width="4.5"/><path d="M258 328L373 448" pathLength="1" stroke-width="4.7"/><path d="M670 451L556 432" pathLength="1" stroke-width="6.0"/><path d="M670 451L606 235" pathLength="1" stroke-width="3.1"/><path d="M675 707L556 432" pathLength="1" stroke-width="1.8"/><path d="M675 707L373 448" pathLength="1" stroke-width="3.9"/><path d="M675 707L476 411" pathLength="1" stroke-width="5.5"/>
+</g>
+<g fill="#0B2545"><circle cx="268" cy="311" r="5"/><circle cx="426" cy="612" r="5"/><circle cx="259" cy="368" r="5"/><circle cx="318" cy="366" r="5"/><circle cx="457" cy="184" r="5"/><circle cx="424" cy="639" r="5"/><circle cx="299" cy="547" r="5"/><circle cx="527" cy="514" r="5"/><circle cx="638" cy="399" r="5"/><circle cx="110" cy="256" r="5"/><circle cx="74" cy="271" r="5"/><circle cx="144" cy="344" r="5"/><circle cx="298" cy="416" r="5"/><circle cx="373" cy="574" r="5"/><circle cx="432" cy="472" r="5"/><circle cx="110" cy="508" r="5"/><circle cx="205" cy="445" r="5"/><circle cx="503" cy="399" r="5"/><circle cx="591" cy="45" r="5"/><circle cx="338" cy="456" r="5"/><circle cx="183" cy="646" r="5"/><circle cx="336" cy="590" r="5"/><circle cx="550" cy="469" r="5"/><circle cx="663" cy="317" r="5"/><circle cx="566" cy="359" r="5"/><circle cx="358" cy="502" r="5"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="597" y="226" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/><rect x="467" y="402" width="18" height="18" rx="3"/><rect x="496" y="261" width="18" height="18" rx="3"/></g>
+<g fill="#FBFDFF" stroke="#9AA8B8" stroke-width="3"><rect x="385" y="258" width="16" height="16" rx="3"/><rect x="259" y="556" width="16" height="16" rx="3"/><rect x="84" y="261" width="16" height="16" rx="3"/></g>
+<g fill="#0B2545" stroke="#FBFDFF" stroke-width="3"><rect x="464" y="292" width="26" height="26" rx="4"/><rect x="359" y="477" width="26" height="26" rx="4"/><rect x="245" y="315" width="26" height="26" rx="4"/></g>
+<rect x="352" y="272" width="24" height="24" rx="4" fill="#FBFDFF" stroke="#0B2545" stroke-width="3"/>
+<g fill="#0B7F64" stroke="#FBFDFF" stroke-width="3"><rect x="655" y="436" width="30" height="30" rx="4"/><rect x="660" y="692" width="30" height="30" rx="4"/></g>
+<g fill="none" stroke="#0B7F64" stroke-width="3"><circle cx="670" cy="451" r="24"><animate attributeName="r" values="22;32;22" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle><circle cx="675" cy="707" r="24"><animate attributeName="r" values="22;32;22" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle></g>
+</svg>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:618px;top:204px;width:100px">Gdansk</p>
+<p class="ml" style="left:130px;top:382px;width:72px">Lille</p>
+<p class="ml" style="left:236px;top:432px;width:128px">Stuttgart</p>
+<p class="ml" style="left:568px;top:440px;width:76px">Brno</p>
+<p class="ml" style="left:416px;top:376px;width:92px">Pilsen</p>
+<p class="ml" style="left:515px;top:236px;width:116px">Szczecin</p>
+<p class="ml off" style="left:290px;top:226px;width:166px">Hamburg (x)</p>
+<p class="ml off" style="left:120px;top:548px;width:118px">Lyon (x)</p>
+<p class="ml off" style="left:10px;top:222px;width:190px">Manchester (x)</p>
+<p class="ml" style="left:494px;top:300px;width:100px;color:#FBFDFF;background:#0B2545">Berlin</p>
+<p class="ml" style="left:196px;top:270px;width:154px;color:#FBFDFF;background:#0B2545">Bremen idle</p>
+<p class="ml" style="left:196px;top:496px;width:140px;color:#FBFDFF;background:#0B2545">Constance</p>
+<p class="ml" style="left:100px;top:300px;width:140px;color:#FBFDFF;background:#0B2545">Rotterdam</p>
+<p class="ml" style="left:560px;top:480px;width:150px;color:#FBFDFF;background:#0B7F64">Košice €38</p>
+<p class="ml" style="left:540px;top:730px;width:150px;color:#FBFDFF;background:#0B7F64">Skopje €40</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Long inbound lanes from the Holstan plants highlighted in red">
+<g stroke="#C8102E" stroke-width="5" stroke-linecap="round"><path d="M675 707L373 448"/><path d="M675 707L476 411"/><path d="M670 451L606 235"/></g>
+<g fill="#C8102E">
+<circle cx="675" cy="707" r="7"><animateMotion dur="2.6s" begin="0s" repeatCount="indefinite" path="M0 0 L-302 -259"/></circle>
+<circle cx="675" cy="707" r="7"><animateMotion dur="2.6s" begin="0s" repeatCount="indefinite" path="M0 0 L-199 -296"/></circle>
+<circle cx="670" cy="451" r="7"><animateMotion dur="2.6s" begin="0s" repeatCount="indefinite" path="M0 0 L-64 -216"/></circle>
+</g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:380px;top:640px;width:280px">Transport +54.5 %</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 2b · Integrating Holstan</p>
+<h2>Holstan’s low-cost plants lift profit by 27.5 % – while transport cost rises by 54.5 %</h2>
+</div>
+<table class="rise d1">
+<tr><th style="width:44%">€ thousand</th><th style="width:18%;text-align:right">2a</th><th style="width:18%;text-align:right">2b</th><th style="width:20%;text-align:right">Change</th></tr>
+<tr><td>Revenue</td><td style="text-align:right">7,329.8</td><td style="text-align:right">7,329.8</td><td style="text-align:right">0 %</td></tr>
+<tr><td>Production</td><td style="text-align:right">4,528.3</td><td style="text-align:right">4,146.3</td><td style="text-align:right;color:#0B7F64">−8.4 %</td></tr>
+<tr><td>Transport (in + out)</td><td style="text-align:right">104.1</td><td style="text-align:right">160.8</td><td style="text-align:right;color:#C8102E">+54.5 %</td></tr>
+<tr><td>Fixed start-up</td><td style="text-align:right">782.4</td><td style="text-align:right">643.7</td><td style="text-align:right;color:#0B7F64">−17.7 %</td></tr>
+<tr><td>Fixed operating</td><td style="text-align:right">170.0</td><td style="text-align:right">155.0</td><td style="text-align:right;color:#0B7F64">−8.8 %</td></tr>
+<tr><td>Total cost</td><td style="text-align:right">5,584.9</td><td style="text-align:right">5,105.8</td><td style="text-align:right;color:#0B7F64">−8.6 %</td></tr>
+<tr style="background:#DCE8F6"><td>Profit</td><td style="text-align:right">1,744.9</td><td style="text-align:right">2,223.9</td><td style="text-align:right;color:#0B7F64">+27.5 %</td></tr>
+</table>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Conditional acquisition</p><p class="body">Purchase price and integration costs are not modelled; 6 of 7 warehouses stay full and Bremen sits idle.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 2a &amp; 2b (network &amp; site summary)</span><span>7</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>Profit bridge 2a → 2b: +€479k</h2>
+<div class="chart" style="gap:26px">
+<div class="row"><p class="lbl">Production</p><div class="track"><div class="bar teal" style="width:79.7%"></div></div><p class="val">+€382.0k</p></div>
+<div class="row"><p class="lbl">Start-up</p><div class="track"><div class="bar teal" style="width:29%"></div></div><p class="val">+€138.8k</p></div>
+<div class="row"><p class="lbl">Fixed op.</p><div class="track"><div class="bar teal" style="width:3.1%"></div></div><p class="val">+€15.0k</p></div>
+<div class="row"><p class="lbl">Transport</p><div class="track"><div class="bar red" style="width:11.8%"></div></div><p class="val">−€56.7k</p></div>
+<div class="row"><p class="lbl">Total</p><div class="track"><div class="bar" style="width:100%"></div></div><p class="val">+€479.0k</p></div>
+</div>
+<p class="body" style="font-size:32px">Košice (23,000 × €38) and Skopje (25,000 × €40) run at 100 % and supply 49 % of demand. Warehouses swap: Hamburg, Lyon, Manchester out – Gdansk, Pilsen, Szczecin in.</p>
+</div>
+<p class="fragment closer" data-fragment-index="3" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Arrival: Holstan plants pulse in green. Click 1: the long inbound lanes from Skopje and Košice light up in red with moving shipments, plus the acquisition caveat. Click 2: profit bridge opens large.</aside>
+</section>
+<section id="a3_demand" class="ice">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="head">
+<p class="eyebrow">Assignment 3a · Demand 2027–2028</p>
+<h2>Demand is seasonal and growing: the July peak rises 14.5 % while the year grows only 4.4 %</h2>
+</div>
+<div style="display:flex;gap:48px;flex:1">
+<div style="position:relative;width:1140px;height:600px">
+<svg style="position:absolute;left:0;top:0" width="1140" height="560" viewBox="0 0 1140 560" aria-label="Monthly demand 2027 and 2028: flat around 3,600 barrels, peaking in July at 5,185 and 5,936">
+<g stroke="#CFDDEE" stroke-width="1.5"><path d="M60 520H1100"/><path d="M60 364H1100"/><path d="M60 208H1100"/><path d="M60 51H1100"/></g>
+<path d="M80 435 L170 432 L260 427 L350 421 L440 366 L530 261 L620 179 L710 281 L800 311 L890 427 L980 428 L1070 428" fill="none" stroke="#5B9BD5" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0s"/></path>
+<path d="M80 417 L170 426 L260 429 L350 424 L440 374 L530 79 L620 61 L710 248 L800 339 L890 428 L980 422 L1070 419" fill="none" stroke="#0B2545" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.8s" begin="0s"/></path>
+<g fill="#0B2545"><circle cx="530" cy="79" r="8"/><circle cx="620" cy="61" r="8"/></g>
+<g fill="#5B9BD5"><circle cx="620" cy="179" r="8"/></g>
+</svg>
+<p style="position:absolute;left:0;top:505px;width:56px;font-size:24px;color:#44556B">3k</p>
+<p style="position:absolute;left:0;top:349px;width:56px;font-size:24px;color:#44556B">4k</p>
+<p style="position:absolute;left:0;top:193px;width:56px;font-size:24px;color:#44556B">5k</p>
+<p style="position:absolute;left:0;top:36px;width:56px;font-size:24px;color:#44556B">6k</p>
+<p style="position:absolute;left:44px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Jan</p>
+<p style="position:absolute;left:134px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Feb</p>
+<p style="position:absolute;left:224px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Mar</p>
+<p style="position:absolute;left:314px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Apr</p>
+<p style="position:absolute;left:404px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">May</p>
+<p style="position:absolute;left:494px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Jun</p>
+<p style="position:absolute;left:584px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Jul</p>
+<p style="position:absolute;left:674px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Aug</p>
+<p style="position:absolute;left:764px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Sep</p>
+<p style="position:absolute;left:854px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Oct</p>
+<p style="position:absolute;left:944px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Nov</p>
+<p style="position:absolute;left:1034px;top:560px;width:72px;text-align:center;font-size:24px;color:#44556B">Dec</p>
+<p class="rise d3" style="position:absolute;left:640px;top:36px;width:280px;font-size:26px;font-weight:700">5,936 · Jul 2028</p>
+<p class="rise d3" style="position:absolute;left:648px;top:186px;width:280px;font-size:26px;font-weight:700;color:#1D5FAD">5,185 · Jul 2027</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="1140" height="560" viewBox="0 0 1140 560" aria-label="Red line: monthly capacity of the 7-warehouse network, 4,267 barrels">
+<path d="M60 322H1100" stroke="#C8102E" stroke-width="4" stroke-dasharray="14 10"/>
+<g fill="none" stroke="#C8102E" stroke-width="4"><circle cx="530" cy="261" r="14"/><circle cx="620" cy="179" r="14"/><circle cx="710" cy="281" r="14"/><circle cx="800" cy="311" r="14"/><circle cx="530" cy="79" r="14"/><circle cx="620" cy="61" r="14"/><circle cx="710" cy="248" r="14"/></g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:820px;top:282px;width:300px">7 sites: 4,267 / month</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:18px;flex:1">
+<div class="legend"><span><b style="color:#0B2545">━</b> 2028</span><span><b style="color:#5B9BD5">━</b> 2027</span></div>
+<div class="kpi rise d1"><p class="num">+4.4 %</p><p class="cap">47,809 → 49,921 barrels; June–July = 91 % of the growth</p></div>
+<div class="kpi rise d2"><p class="num">+46 %</p><p class="cap">July 2028 peak vs. the monthly average of 4,072</p></div>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Implication</p><p class="body">7 of 24 months exceed the 7-site capacity: plan for the peak, not the average.</p></div>
+</div>
+</div>
+<p class="footer"><span>Group 03 · Source: Assignment 3 demand data (periods 1–24)</span><span>8</span></p>
+<aside>Arrival: both years draw in. Click 1: the red line shows the monthly capacity of the 7-warehouse network from 2b; every summer month above it needs extra capacity.</aside>
+</section>
+<section id="a3_network" class="mapslide">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="map">
+<svg width="737" height="784" viewBox="0 0 737 784" aria-label="Map of the 3b multi-period network with 11 warehouses used over 24 months">
+<rect width="737" height="784" rx="18" fill="#E3ECF7"/>
+<path d="M103 654 L117 608 L118 547 L86 505 L42 485 L34 455 L74 447 L111 455 L101 413 L142 428 L155 405 L187 398 L204 363 L233 348 L248 325 L263 290 L292 271 L324 268 L359 252 L359 214 L347 191 L347 149 L359 130 L406 107 L403 130 L416 153 L401 172 L386 191 L391 214 L398 233 L417 245 L466 233 L497 249 L541 241 L597 218 L607 233 L634 225 L663 210 L663 172 L678 119 L722 84 L727 42 L737 42 L737 784 L629 784 L627 726 L616 704 L592 684 L551 650 L521 627 L499 581 L482 589 L484 565 L452 569 L455 596 L457 631 L479 646 L497 692 L546 710 L556 734 L587 760 L602 784 L531 784 L502 760 L497 753 L482 738 L452 718 L422 692 L406 668 L398 638 L386 627 L367 615 L344 634 L327 642 L295 665 L277 658 L261 654 L228 662 L223 688 L217 718 L184 738 L160 764 L142 784 L0 784 L0 650Z M10 398 L64 378 L101 374 L155 370 L182 360 L182 348 L177 332 L189 306 L172 290 L153 271 L132 229 L113 210 L98 179 L83 153 L103 115 L62 107 L74 73 L24 73 L5 115 L0 153 L10 183 L24 210 L69 214 L69 241 L74 271 L34 275 L37 294 L32 321 L23 336 L49 340 L69 344 L44 356 L37 363 L24 378Z M268 0 L285 57 L319 96 L344 92 L381 61 L406 42 L420 54 L427 84 L440 107 L457 145 L465 187 L497 195 L509 169 L538 165 L556 115 L561 73 L597 46 L607 12 L577 0Z M450 169 L457 187 L450 210 L420 199 L417 175Z M378 668 L382 692 L373 730 L359 710 L359 688Z M373 738 L386 784 L354 784 L349 760 L354 745Z" fill="#FBFDFF" stroke="#C3D4E8" stroke-width="1.5"/>
+<g fill="none" stroke="#5B9BD5" stroke-opacity="0.7" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.6s" begin="0.8s"/>
+<path d="M556 432L426 612" pathLength="1" stroke-width="1.6"/><path d="M556 432L424 639" pathLength="1" stroke-width="1.7"/><path d="M556 432L527 514" pathLength="1" stroke-width="2.0"/><path d="M556 432L638 399" pathLength="1" stroke-width="1.9"/><path d="M556 432L373 574" pathLength="1" stroke-width="1.6"/><path d="M556 432L432 472" pathLength="1" stroke-width="2.9"/><path d="M556 432L503 399" pathLength="1" stroke-width="2.5"/><path d="M556 432L550 469" pathLength="1" stroke-width="2.3"/><path d="M556 432L663 317" pathLength="1" stroke-width="4.8"/><path d="M556 432L566 359" pathLength="1" stroke-width="1.8"/><path d="M606 235L591 45" pathLength="1" stroke-width="2.1"/><path d="M606 235L663 317" pathLength="1" stroke-width="1.7"/><path d="M442 107L591 45" pathLength="1" stroke-width="3.2"/><path d="M393 266L268 311" pathLength="1" stroke-width="2.8"/><path d="M393 266L259 368" pathLength="1" stroke-width="1.5"/><path d="M393 266L318 366" pathLength="1" stroke-width="2.4"/><path d="M393 266L457 184" pathLength="1" stroke-width="2.9"/><path d="M222 377L259 368" pathLength="1" stroke-width="2.9"/><path d="M222 377L144 344" pathLength="1" stroke-width="2.8"/><path d="M222 377L110 508" pathLength="1" stroke-width="1.6"/><path d="M222 377L205 445" pathLength="1" stroke-width="4.1"/><path d="M267 564L299 547" pathLength="1" stroke-width="2.1"/><path d="M267 564L110 508" pathLength="1" stroke-width="1.9"/><path d="M267 564L205 445" pathLength="1" stroke-width="2.5"/><path d="M267 564L183 646" pathLength="1" stroke-width="2.0"/><path d="M267 564L336 590" pathLength="1" stroke-width="2.0"/><path d="M92 269L110 256" pathLength="1" stroke-width="1.7"/><path d="M92 269L74 271" pathLength="1" stroke-width="2.4"/><path d="M92 269L144 344" pathLength="1" stroke-width="4.5"/><path d="M279 658L424 639" pathLength="1" stroke-width="1.5"/><path d="M279 658L373 574" pathLength="1" stroke-width="1.5"/><path d="M279 658L110 508" pathLength="1" stroke-width="1.5"/><path d="M279 658L183 646" pathLength="1" stroke-width="1.8"/><path d="M279 658L336 590" pathLength="1" stroke-width="1.8"/><path d="M373 448L268 311" pathLength="1" stroke-width="1.5"/><path d="M373 448L259 368" pathLength="1" stroke-width="1.6"/><path d="M373 448L318 366" pathLength="1" stroke-width="6.0"/><path d="M373 448L299 547" pathLength="1" stroke-width="1.6"/><path d="M373 448L298 416" pathLength="1" stroke-width="1.8"/><path d="M373 448L373 574" pathLength="1" stroke-width="1.8"/><path d="M373 448L205 445" pathLength="1" stroke-width="4.1"/><path d="M373 448L338 456" pathLength="1" stroke-width="2.4"/><path d="M373 448L183 646" pathLength="1" stroke-width="1.6"/><path d="M373 448L336 590" pathLength="1" stroke-width="1.7"/><path d="M373 448L358 502" pathLength="1" stroke-width="3.4"/><path d="M476 411L268 311" pathLength="1" stroke-width="1.7"/><path d="M476 411L318 366" pathLength="1" stroke-width="1.8"/><path d="M476 411L432 472" pathLength="1" stroke-width="5.8"/><path d="M505 270L318 366" pathLength="1" stroke-width="1.9"/><path d="M505 270L457 184" pathLength="1" stroke-width="2.6"/><path d="M505 270L591 45" pathLength="1" stroke-width="3.1"/><path d="M505 270L663 317" pathLength="1" stroke-width="1.5"/>
+</g>
+<g fill="none" stroke="#0B2545" stroke-opacity="0.7" stroke-linecap="round" stroke-dasharray="1" stroke-dashoffset="0"><animate attributeName="stroke-dashoffset" from="1" to="0" dur="1.2s" begin="0s"/>
+<path d="M477 305L505 270" pathLength="1" stroke-width="2.3"/><path d="M364 284L393 266" pathLength="1" stroke-width="2.0"/><path d="M372 490L267 564" pathLength="1" stroke-width="1.7"/><path d="M372 490L373 448" pathLength="1" stroke-width="4.5"/><path d="M258 328L442 107" pathLength="1" stroke-width="2.5"/><path d="M258 328L393 266" pathLength="1" stroke-width="3.0"/><path d="M258 328L222 377" pathLength="1" stroke-width="4.5"/><path d="M258 328L92 269" pathLength="1" stroke-width="3.8"/><path d="M258 328L373 448" pathLength="1" stroke-width="2.3"/><path d="M670 451L556 432" pathLength="1" stroke-width="6.0"/><path d="M670 451L606 235" pathLength="1" stroke-width="2.0"/><path d="M670 451L505 270" pathLength="1" stroke-width="2.4"/><path d="M675 707L267 564" pathLength="1" stroke-width="2.9"/><path d="M675 707L279 658" pathLength="1" stroke-width="1.9"/><path d="M675 707L373 448" pathLength="1" stroke-width="3.8"/><path d="M675 707L476 411" pathLength="1" stroke-width="4.0"/>
+</g>
+<g fill="#0B2545"><circle cx="268" cy="311" r="5"/><circle cx="426" cy="612" r="5"/><circle cx="259" cy="368" r="5"/><circle cx="318" cy="366" r="5"/><circle cx="457" cy="184" r="5"/><circle cx="424" cy="639" r="5"/><circle cx="299" cy="547" r="5"/><circle cx="527" cy="514" r="5"/><circle cx="638" cy="399" r="5"/><circle cx="110" cy="256" r="5"/><circle cx="74" cy="271" r="5"/><circle cx="144" cy="344" r="5"/><circle cx="298" cy="416" r="5"/><circle cx="373" cy="574" r="5"/><circle cx="432" cy="472" r="5"/><circle cx="110" cy="508" r="5"/><circle cx="205" cy="445" r="5"/><circle cx="503" cy="399" r="5"/><circle cx="591" cy="45" r="5"/><circle cx="338" cy="456" r="5"/><circle cx="183" cy="646" r="5"/><circle cx="336" cy="590" r="5"/><circle cx="550" cy="469" r="5"/><circle cx="663" cy="317" r="5"/><circle cx="566" cy="359" r="5"/><circle cx="358" cy="502" r="5"/></g>
+<g fill="#0B2545" stroke="#FBFDFF" stroke-width="3"><rect x="464" y="292" width="26" height="26" rx="4"/><rect x="351" y="271" width="26" height="26" rx="4"/><rect x="359" y="477" width="26" height="26" rx="4"/><rect x="245" y="315" width="26" height="26" rx="4"/><rect x="657" y="438" width="26" height="26" rx="4"/><rect x="662" y="694" width="26" height="26" rx="4"/></g>
+<g fill="#1D5FAD" stroke="#FBFDFF" stroke-width="2"><rect x="547" y="423" width="18" height="18" rx="3"/><rect x="597" y="226" width="18" height="18" rx="3"/><rect x="433" y="98" width="18" height="18" rx="3"/><rect x="213" y="368" width="18" height="18" rx="3"/><rect x="364" y="439" width="18" height="18" rx="3"/><rect x="467" y="402" width="18" height="18" rx="3"/><rect x="496" y="261" width="18" height="18" rx="3"/></g>
+<g fill="#0B7F64" stroke="#FBFDFF" stroke-width="2"><rect x="82" y="258" width="22" height="22" rx="3"/><rect x="256" y="553" width="22" height="22" rx="3"/><rect x="382" y="255" width="22" height="22" rx="3"/><rect x="268" y="647" width="22" height="22" rx="3"/></g>
+</svg>
+<p class="ml" style="left:284px;top:118px;width:150px">Gothenburg</p>
+<p class="ml" style="left:618px;top:204px;width:100px">Gdansk</p>
+<p class="ml" style="left:130px;top:382px;width:72px">Lille</p>
+<p class="ml" style="left:236px;top:432px;width:128px">Stuttgart</p>
+<p class="ml" style="left:568px;top:440px;width:76px">Brno</p>
+<p class="ml" style="left:416px;top:376px;width:92px">Pilsen</p>
+<p class="ml" style="left:515px;top:236px;width:116px">Szczecin</p>
+<p class="pin teal rise d2" style="left:10px;top:216px;width:236px">Manchester · Jan 27</p>
+<p class="pin teal rise d3" style="left:60px;top:560px;width:180px">Lyon · May 27</p>
+<p class="pin teal rise d4" style="left:256px;top:214px;width:220px">Hamburg · Jun 27</p>
+<p class="pin teal rise d5" style="left:296px;top:666px;width:250px">Marseilles · Jun 28</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:0;top:0" width="737" height="784" viewBox="0 0 737 784" aria-label="Under-used sites circled in red: Gothenburg, Gdansk and Szczecin">
+<g fill="none" stroke="#C8102E" stroke-width="4">
+<circle cx="442" cy="107" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="606" cy="235" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+<circle cx="505" cy="270" r="18"><animate attributeName="r" values="16;26;16" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:290px;top:60px;width:290px">Gothenburg: part-time</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:480px;top:150px;width:230px">Gdansk: 7 months</p>
+</div>
+<div class="head">
+<p class="eyebrow">Assignment 3b · 24-month network</p>
+<h2>Seasonal peaks need 11 warehouses instead of 7 – four extra sites switch on before each summer</h2>
+</div>
+<div class="kpis rise d1">
+<div class="kpi teal"><p class="num">7 → 11</p><p class="cap">warehouses used vs. 2b</p></div>
+<div class="kpi"><p class="num">524 → 403 km</p><p class="cap">average delivery distance</p></div>
+</div>
+<div class="card teal rise d2"><p class="tag teal">Added (green)</p><p class="body">Manchester, Lyon, Hamburg and Marseilles carry 24.7 % of demand; 15 of 26 customers switch warehouse between months.</p></div>
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Not purely additive</p><p class="body">Gothenburg and Gdansk open late and run part-time; Szczecin is idle 4 months. Plants: Rotterdam, Košice and Skopje are full all 24 months.</p></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 3b (site summary per period, flows)</span><span>9</span></p>
+<div class="zoom fragment" data-fragment-index="2">
+<h2>The four added warehouses</h2>
+<table>
+<tr><th style="width:28%">Warehouse</th><th style="width:20%">First used</th><th style="width:18%;text-align:right">Months used</th><th style="width:16%;text-align:right">Full months</th><th style="width:18%;text-align:right">Barrels</th></tr>
+<tr><td>Manchester</td><td>Jan 2027</td><td style="text-align:right">24 / 24</td><td style="text-align:right">24</td><td style="text-align:right">8,712</td></tr>
+<tr><td>Lyon</td><td>May 2027</td><td style="text-align:right">20 / 24</td><td style="text-align:right">7</td><td style="text-align:right">6,434</td></tr>
+<tr><td>Hamburg</td><td>Jun 2027</td><td style="text-align:right">19 / 24</td><td style="text-align:right">6</td><td style="text-align:right">7,484</td></tr>
+<tr><td>Marseilles</td><td>Jun 2028</td><td style="text-align:right">7 / 24</td><td style="text-align:right">2</td><td style="text-align:right">1,499</td></tr>
+</table>
+<p class="body" style="font-size:32px">Together 24,129 barrels = 24.7 % of the 97,730 barrels.</p>
+</div>
+<p class="fragment closer" data-fragment-index="3" style="position:absolute;left:1700px;top:1000px;width:40px;font-size:24px">·</p>
+<aside>Arrival: the network draws in, then the four added warehouses appear in green in the order they open (Jan 27, May 27, Jun 27, Jun 28). Click 1: part-time sites pulse red. Click 2: table of the added sites opens large.</aside>
+</section>
+<section id="a3_capacity">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="head">
+<p class="eyebrow">Assignment 3b · Capacity month by month</p>
+<h2>Warehouse capacity steps up before each summer – and is almost exhausted at the July 2028 peak</h2>
+</div>
+<div style="position:relative;width:1664px;height:550px">
+<div style="position:absolute;left:40px;top:0;width:1488px;height:500px;display:flex;align-items:flex-end;gap:18px">
+<div class="bar" style="width:44px;height:262px;animation:rise .6s ease-out both;animation-delay:0s"></div>
+<div class="bar" style="width:44px;height:263px;animation:rise .6s ease-out both;animation-delay:.03s"></div>
+<div class="bar" style="width:44px;height:265px;animation:rise .6s ease-out both;animation-delay:.06s"></div>
+<div class="bar" style="width:44px;height:268px;animation:rise .6s ease-out both;animation-delay:.09s"></div>
+<div class="bar" style="width:44px;height:294px;animation:rise .6s ease-out both;animation-delay:.12s"></div>
+<div class="bar" style="width:44px;height:344px;animation:rise .6s ease-out both;animation-delay:.15s"></div>
+<div class="bar" style="width:44px;height:383px;animation:rise .6s ease-out both;animation-delay:.18s"></div>
+<div class="bar" style="width:44px;height:334px;animation:rise .6s ease-out both;animation-delay:.21s"></div>
+<div class="bar" style="width:44px;height:321px;animation:rise .6s ease-out both;animation-delay:.24s"></div>
+<div class="bar" style="width:44px;height:266px;animation:rise .6s ease-out both;animation-delay:.27s"></div>
+<div class="bar" style="width:44px;height:265px;animation:rise .6s ease-out both;animation-delay:.3s"></div>
+<div class="bar" style="width:44px;height:265px;animation:rise .6s ease-out both;animation-delay:.33s"></div>
+<div class="bar navy" style="width:44px;height:270px;animation:rise .6s ease-out both;animation-delay:.36s"></div>
+<div class="bar navy" style="width:44px;height:266px;animation:rise .6s ease-out both;animation-delay:.39s"></div>
+<div class="bar navy" style="width:44px;height:265px;animation:rise .6s ease-out both;animation-delay:.42s"></div>
+<div class="bar navy" style="width:44px;height:267px;animation:rise .6s ease-out both;animation-delay:.45s"></div>
+<div class="bar navy" style="width:44px;height:291px;animation:rise .6s ease-out both;animation-delay:.48s"></div>
+<div class="bar navy" style="width:44px;height:430px;animation:rise .6s ease-out both;animation-delay:.51s"></div>
+<div class="bar navy" style="width:44px;height:438px;animation:rise .6s ease-out both;animation-delay:.54s"></div>
+<div class="bar navy" style="width:44px;height:350px;animation:rise .6s ease-out both;animation-delay:.57s"></div>
+<div class="bar navy" style="width:44px;height:307px;animation:rise .6s ease-out both;animation-delay:.6s"></div>
+<div class="bar navy" style="width:44px;height:265px;animation:rise .6s ease-out both;animation-delay:.63s"></div>
+<div class="bar navy" style="width:44px;height:268px;animation:rise .6s ease-out both;animation-delay:.66s"></div>
+<div class="bar navy" style="width:44px;height:269px;animation:rise .6s ease-out both;animation-delay:.69s"></div>
+</div>
+<svg class="fadein" style="position:absolute;left:31px;top:0;animation-delay:.8s" width="1506" height="500" viewBox="0 0 1506 500" aria-label="Step line: open warehouse capacity rises from 3,817 to 4,330, 4,830, 5,393 and 5,972 barrels per month">
+<path d="M0 218 H257 V180 H319 V143 H381 V102 H1063 V59 H1506" fill="none" stroke="#0B7F64" stroke-width="5" stroke-linejoin="round"/>
+</svg>
+<p style="position:absolute;left:40px;top:510px;width:740px;font-size:24px;color:#44556B">2027 · Jan → Dec</p>
+<p style="position:absolute;left:784px;top:510px;width:740px;font-size:24px;color:#44556B">2028 · Jan → Dec</p>
+<p class="rise d3" style="position:absolute;left:1240px;top:22px;width:300px;font-size:24px;font-weight:700;color:#0B7F64">5,972 capacity</p>
+<p class="rise d3" style="position:absolute;left:120px;top:182px;width:300px;font-size:24px;font-weight:700;color:#0B7F64">3,817 capacity</p>
+<svg class="fragment hl" data-fragment-index="1" style="position:absolute;left:31px;top:0" width="1506" height="500" viewBox="0 0 1506 500" aria-label="Red: the 7-site capacity of 4,267 barrels per month and the July 2028 peak">
+<path d="M0 185 H1506" stroke="#C8102E" stroke-width="4" stroke-dasharray="14 10"/>
+<circle cx="1147" cy="62" r="30" fill="none" stroke="#C8102E" stroke-width="5"><animate attributeName="r" values="26;38;26" dur="2s" begin="0s" repeatCount="indefinite"/></circle>
+</svg>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:1180px;top:100px;width:420px">Jul 2028: 5,936 of 5,972 → 36 spare</p>
+<p class="pin red fragment hl" data-fragment-index="1" style="left:430px;top:196px;width:470px">7 sites of 2b: 4,267 / month – too small</p>
+</div>
+<div class="legend"><span><b style="color:#1D5FAD">■</b> Demand 2027</span><span><b style="color:#0B2545">■</b> Demand 2028</span><span><b style="color:#0B7F64">━</b> Capacity of open warehouses</span><span><b style="color:#C8102E">┅</b> 7-site capacity (click)</span></div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 3b (site summary per period)</span><span>10</span></p>
+<aside>Arrival: 24 monthly bars grow, then the green capacity step appears: 3,817 (Jan–Apr 27) → 4,330 (May) → 4,830 (Jun) → 5,393 (Jul 27–May 28) → 5,972 (Jun–Dec 28). Click 1: the 7-site capacity line and the July 2028 bottleneck light up in red. Demand growing 4.4 % a year with peaks +14.5 % would exceed today’s maximum in summer 2029.</aside>
+</section>
+<section id="a3_finance" class="ice">
+<img class="logo" src="klu_logo.png" alt="Kühne Logistics University logo">
+<div class="head">
+<p class="eyebrow">Assignment 3b · Financial impact and outlook</p>
+<h2>Covering the peak costs €513k of profit – mostly one-off start-up of the four extra sites</h2>
+</div>
+<div style="display:flex;gap:48px;flex:1">
+<div style="display:flex;flex-direction:column;gap:20px;width:900px">
+<table class="rise d1" style="font-size:30px">
+<tr><th style="width:40%">€</th><th style="width:30%;text-align:right">2b (1 year)</th><th style="width:30%;text-align:right">3b (24 months)</th></tr>
+<tr><td>Revenue</td><td style="text-align:right">7,329,750</td><td style="text-align:right">7,329,750</td></tr>
+<tr><td>Production</td><td style="text-align:right">4,146,310</td><td style="text-align:right">4,146,334</td></tr>
+<tr><td>Transport</td><td style="text-align:right">160,835</td><td style="text-align:right;color:#0B7F64">143,914</td></tr>
+<tr><td>Fixed start-up</td><td style="text-align:right">643,687</td><td style="text-align:right;color:#C8102E">1,121,191</td></tr>
+<tr><td>Fixed operating</td><td style="text-align:right">155,000</td><td style="text-align:right;color:#C8102E">207,519</td></tr>
+<tr><td>Total cost</td><td style="text-align:right">5,105,832</td><td style="text-align:right">5,618,958</td></tr>
+<tr style="background:#DCE8F6"><td>Profit</td><td style="text-align:right">2,223,918</td><td style="text-align:right;color:#C8102E">1,710,792 (−23.1 %)</td></tr>
+</table>
+<p class="body" style="font-size:24px">Both models serve 97,730 barrels; 3b must also meet demand in each of the 24 months. Start-up (+€477,504) explains 93 % of the drop.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:20px;flex:1">
+<div class="card red fragment step" data-fragment-index="1"><p class="tag red">Future risk</p><p class="body">Only 36 barrels headroom at the 2028 peak. With peaks growing ~14.5 % a year, summer 2029 will not fit.</p></div>
+<div class="card teal fragment step" data-fragment-index="2"><p class="tag teal">Recommendation</p><p class="body">Keep the lean core, add seasonal capacity (flexible or third-party space) before summer and re-run the model with 2029 demand.</p></div>
+</div>
+</div>
+<p class="footer"><span>Group 03 · Source: Supply Chain Guru 2b &amp; 3b (network summary)</span><span>11</span></p>
+<aside>Transport falls by €16,921 because customers are served from closer sites (524 → 403 km). Start-up costs are paid once, so in later years the gap to 2b would shrink to the extra fixed operating cost. Click 1: future risk. Click 2: recommendation.</aside>
+</section>
+</div>
+<div id="progress"></div>
+<div id="hud"><span id="count"></span><button id="prev" title="Back (←)">◀</button><button id="next" title="Next (→ / Space / click)">▶</button><button id="fs" title="Fullscreen (F)">⛶</button></div>
+<script>
+(function () {
+  const stage = document.getElementById('stage');
+  const originals = Array.from(stage.querySelectorAll(':scope > section')).map(s => s.cloneNode(true));
+  originals.forEach(() => {});
+  let slides = Array.from(stage.querySelectorAll(':scope > section'));
+  let cur = 0, step = 0;
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    stage.style.transform = 'scale(' + s + ') translate(-50%, -50%)';
+    stage.style.transform = 'translate(' + (-960 * s) + 'px,' + (-540 * s) + 'px) scale(' + s + ')';
+  }
+  function steps(sec) {
+    const fr = Array.from(sec.querySelectorAll('.fragment'));
+    const idx = [...new Set(fr.map(f => f.dataset.fragmentIndex).filter(v => v !== undefined).map(Number))].sort((a, b) => a - b);
+    const groups = idx.map(i => fr.filter(f => Number(f.dataset.fragmentIndex) === i));
+    fr.filter(f => f.dataset.fragmentIndex === undefined).forEach(f => groups.push([f]));
+    return groups;
+  }
+  function apply() {
+    const g = steps(slides[cur]);
+    g.forEach((grp, k) => grp.forEach(f => {
+      f.classList.toggle('visible', k < step);
+      f.classList.toggle('current-fragment', k === step - 1);
+    }));
+    document.getElementById('count').textContent = (cur + 1) + ' / ' + slides.length + (g.length ? '  ·  step ' + step + '/' + g.length : '');
+    document.getElementById('progress').style.width = ((cur + 1) / slides.length * 100) + '%';
+  }
+  function show(n, atEnd) {
+    n = Math.max(0, Math.min(slides.length - 1, n));
+    const fresh = originals[n].cloneNode(true);   // restart arrival animations
+    stage.replaceChild(fresh, slides[n]);
+    slides[n] = fresh;
+    slides.forEach((s, i) => s.classList.toggle('on', i === n));
+    cur = n;
+    step = atEnd ? steps(fresh).length : 0;
+    fresh.querySelectorAll('svg').forEach(sv => { try { sv.setCurrentTime(0); sv.unpauseAnimations(); } catch (e) {} });
+    apply();
+    history.replaceState(null, '', '#' + (n + 1));
+  }
+  function next() { const g = steps(slides[cur]).length; if (step < g) { step++; apply(); } else if (cur < slides.length - 1) show(cur + 1, false); }
+  function prev() { if (step > 0) { step--; apply(); } else if (cur > 0) show(cur - 1, true); }
+  function fullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+
+  addEventListener('keydown', e => {
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0, false);
+    else if (e.key === 'End') show(slides.length - 1, true);
+    else if (e.key === 'f' || e.key === 'F') fullscreen();
+  });
+  stage.addEventListener('click', next);
+  document.getElementById('next').onclick = next;
+  document.getElementById('prev').onclick = prev;
+  document.getElementById('fs').onclick = fullscreen;
+  let tx = null;
+  addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (dx < -40) next(); else if (dx > 40) prev(); tx = null; });
+  addEventListener('resize', fit);
+  fit();
+  const h = parseInt(location.hash.slice(1), 10);
+  show(isNaN(h) ? 0 : h - 1, false);
+})();
+</script>
+</body>
+</html>
